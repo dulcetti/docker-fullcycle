@@ -1,7 +1,13 @@
 FROM golang:1.12.0-alpine3.9 AS build
 
-WORKDIR /app
-RUN mkdir app
-COPY ./app .
+WORKDIR /my-hello
+RUN mkdir my-hello
+COPY dulcetti.go /my-hello
 
-CMD [ "./app" ]
+RUN cd /my-hello
+RUN go build dulcetti.go 
+
+FROM scratch
+COPY --from=build /my-hello/dulcetti /my-hello/
+
+CMD [ "/my-hello/dulcetti" ]
